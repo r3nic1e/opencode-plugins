@@ -53,4 +53,4 @@ npm test
 1. Bump `version` in `packages/<directory>/package.json` and merge the change.
 2. Push the tag `<directory>@<version>` on that commit, for example `evidence@0.2.0`.
 
-The `release` workflow checks that the tag matches the package version, runs the checks, and publishes the package to npm with provenance. It needs the `NPM_TOKEN` repository secret.
+The `release` workflow checks that the tag matches the package version, runs the checks, and publishes the package to npm with provenance. It authenticates with npm trusted publishing (OIDC), so it needs no token. A new package must be published once by hand and get `release.yml` as its trusted publisher before a tag can release it.
