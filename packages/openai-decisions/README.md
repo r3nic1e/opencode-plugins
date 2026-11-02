@@ -9,7 +9,7 @@ Registers an `openai_decisions` tool, also available to Code Mode. It evaluates 
   "$schema": "https://opencode.ai/config.json",
   "plugins": [
     {
-      "package": "@r3nic1e/opencode-openai-decisions@0.1.0",
+      "package": "@r3nic1e/opencode-openai-decisions@0.1.1",
       "options": {
         "endpoint": "https://litellm.example.com/openai/v1/decisions",
         "providerID": "litellm",

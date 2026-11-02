@@ -1,6 +1,6 @@
 {
   "name": "@r3nic1e/opencode-mcp-health",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tells the model which MCP servers are down or need sign-in, and which local references are missing.",
   "type": "module",
   "license": "MIT",

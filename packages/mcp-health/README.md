@@ -13,7 +13,7 @@ The note tells the model which service is down and what to ask the user. It disa
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugins": ["@r3nic1e/opencode-mcp-health@0.1.0"],
+  "plugins": ["@r3nic1e/opencode-mcp-health@0.1.1"],
 }
 ```
 
@@ -30,7 +30,7 @@ The note tells the model which service is down and what to ask the user. It disa
 {
   "plugins": [
     {
-      "package": "@r3nic1e/opencode-mcp-health@0.1.0",
+      "package": "@r3nic1e/opencode-mcp-health@0.1.1",
       "options": {
         "expectedDown": ["demo_browser"],
         "advice": { "missing": "The host mount is missing. Ask the user to restore the mount." },

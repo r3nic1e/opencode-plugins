@@ -7,7 +7,7 @@ LiteLLM's Chat Completions route rejects the Anthropic prompt-cache fields that 
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugins": ["@r3nic1e/opencode-litellm-cache-scrub@0.1.0"],
+  "plugins": ["@r3nic1e/opencode-litellm-cache-scrub@0.1.1"],
 }
 ```
 
@@ -20,7 +20,7 @@ LiteLLM's Chat Completions route rejects the Anthropic prompt-cache fields that 
 ```jsonc
 {
   "plugins": [
-    { "package": "@r3nic1e/opencode-litellm-cache-scrub@0.1.0", "options": { "providerIDs": ["litellm", "gateway"] } },
+    { "package": "@r3nic1e/opencode-litellm-cache-scrub@0.1.1", "options": { "providerIDs": ["litellm", "gateway"] } },
   ],
 }
 ```

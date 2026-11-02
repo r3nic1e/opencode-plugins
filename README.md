@@ -21,9 +21,9 @@ Add server plugins to `plugins` in `opencode.json(c)`. Pin a version, and use th
 {
   "$schema": "https://opencode.ai/config.json",
   "plugins": [
-    "@r3nic1e/opencode-evidence@0.1.0",
+    "@r3nic1e/opencode-evidence@0.1.1",
     {
-      "package": "@r3nic1e/opencode-openai-decisions@0.1.0",
+      "package": "@r3nic1e/opencode-openai-decisions@0.1.1",
       "options": { "endpoint": "https://api.openai.com/v1/decisions", "providerID": "openai-api" },
     },
   ],
@@ -35,7 +35,7 @@ A package with only a TUI part, such as `@r3nic1e/opencode-mcp-args`, goes in `p
 Each release also has a Git tag `<directory>@<version>`, so you can install from GitHub without npm:
 
 ```sh
-opencode plugin add 'github:r3nic1e/opencode-plugins#evidence@0.1.0::path:packages/evidence'
+opencode plugin add 'github:r3nic1e/opencode-plugins#evidence@0.1.1::path:packages/evidence'
 ```
 
 ## Development
