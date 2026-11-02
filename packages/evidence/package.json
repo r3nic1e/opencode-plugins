@@ -1,6 +1,6 @@
 {
   "name": "@r3nic1e/opencode-evidence",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Records tool observations, adds citation handles, and lets you inspect the source of assistant citations.",
   "type": "module",
   "license": "MIT",

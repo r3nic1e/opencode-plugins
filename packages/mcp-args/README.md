@@ -12,6 +12,6 @@ The package has only a TUI part, so add it to `plugins` in `cli.json`:
 ```json
 {
   "$schema": "https://opencode.ai/v2/cli.json",
-  "plugins": ["@r3nic1e/opencode-mcp-args@0.1.1"]
+  "plugins": ["@r3nic1e/opencode-mcp-args@0.1.2"]
 }
 ```
