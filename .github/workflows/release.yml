@@ -1,0 +1,55 @@
+name: release
+
+# Push a tag `<package directory>@<version>`, for example `evidence@0.1.0`, to publish that package.
+on:
+  push:
+    tags: ["*@*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - name: Resolve package from tag
+        id: package
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          name="${TAG%@*}"
+          version="${TAG##*@}"
+          dir="packages/$name"
+          if [ ! -f "$dir/package.json" ]; then
+            echo "::error::No package directory $dir for tag $TAG"
+            exit 1
+          fi
+          actual="$(node -p "require('./$dir/package.json').version")"
+          if [ "$actual" != "$version" ]; then
+            echo "::error::Tag version $version does not match $dir/package.json version $actual"
+            exit 1
+          fi
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+      - run: npm ci
+      - run: npm run typecheck
+      - name: Test
+        env:
+          DIR: ${{ steps.package.outputs.dir }}
+        run: |
+          if [ -d "$DIR/test" ]; then
+            node --test "$DIR/test/*.test.mjs"
+          fi
+      - name: Publish
+        env:
+          DIR: ${{ steps.package.outputs.dir }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --workspace "$DIR"
