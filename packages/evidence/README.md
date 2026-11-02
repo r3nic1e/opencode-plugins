@@ -24,7 +24,7 @@ Add the package to `plugins` in `opencode.json(c)`. The package exports server, 
   "$schema": "https://opencode.ai/config.json",
   "plugins": [
     {
-      "package": "@r3nic1e/opencode-evidence@0.1.0",
+      "package": "@r3nic1e/opencode-evidence@0.1.1",
       "options": { "maxSnapshotBytes": 262144 }
     }
   ]

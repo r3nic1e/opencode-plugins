@@ -17,7 +17,7 @@ Text inside quotes, comments, and heredoc bodies does not count as a command.
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugins": ["@r3nic1e/opencode-github-guard@0.1.0"],
+  "plugins": ["@r3nic1e/opencode-github-guard@0.1.1"],
 }
 ```
 
@@ -38,7 +38,7 @@ A `fix` value is a string or an array of lines.
 {
   "plugins": [
     {
-      "package": "@r3nic1e/opencode-github-guard@0.1.0",
+      "package": "@r3nic1e/opencode-github-guard@0.1.1",
       "options": {
         "git": {
           "note": "Use the host Git broker MCP.",

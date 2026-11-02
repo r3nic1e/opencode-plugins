@@ -1,6 +1,6 @@
 {
   "name": "@r3nic1e/opencode-openai-decisions",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Adds an openai_decisions tool that calls the OpenAI Decisions API through a configured provider's credentials.",
   "type": "module",
   "license": "MIT",

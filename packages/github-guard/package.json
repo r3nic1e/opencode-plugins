@@ -1,6 +1,6 @@
 {
   "name": "@r3nic1e/opencode-github-guard",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Blocks remote git, gh, and api.github.com calls in sandboxes that cannot reach them, and tells the model what to use instead.",
   "type": "module",
   "license": "MIT",

@@ -16,7 +16,7 @@ The plugin listens on `127.0.0.1` and serves Meridian's payload in the native `q
   "$schema": "https://opencode.ai/config.json",
   "plugins": [
     "@slkiser/opencode-quota@6.0.0",
-    "@r3nic1e/opencode-meridian-quota@0.1.0",
+    "@r3nic1e/opencode-meridian-quota@0.1.1",
   ],
 }
 ```

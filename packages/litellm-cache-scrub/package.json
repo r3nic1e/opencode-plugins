@@ -1,6 +1,6 @@
 {
   "name": "@r3nic1e/opencode-litellm-cache-scrub",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Removes Anthropic prompt-cache fields from requests to LiteLLM and other OpenAI-compatible gateways that reject them.",
   "type": "module",
   "license": "MIT",

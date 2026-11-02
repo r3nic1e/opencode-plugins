@@ -1,6 +1,6 @@
 {
   "name": "@r3nic1e/opencode-meridian-quota",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Serves Meridian's Anthropic quota to @slkiser/opencode-quota in its native quota-v1 format.",
   "type": "module",
   "license": "MIT",
