@@ -1,6 +1,6 @@
 {
   "name": "@r3nic1e/opencode-evidence",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Records tool observations, adds citation handles, and lets you inspect the source of assistant citations.",
   "type": "module",
   "license": "MIT",
@@ -20,13 +20,17 @@
   ],
   "exports": {
     ".": "./src/index.ts",
-    "./tui": "./src/tui.tsx",
+    "./tui": "./dist/tui.js",
     "./rpc": "./src/rpc.ts"
   },
   "files": [
     "src",
+    "dist",
     "README.md"
   ],
+  "scripts": {
+    "prepack": "node ../../scripts/build-tui.mjs ."
+  },
   "peerDependencies": {
     "@opencode/plugin": "^2.2.0",
     "@opentui/core": ">=0.8.0",

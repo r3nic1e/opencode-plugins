@@ -1,4 +1,3 @@
-/** @jsxImportSource @opentui/solid */
 import type { Plugin } from "@opencode/plugin/tui";
 import { createEffect, createSignal, For, on, onCleanup, Show } from "solid-js";
 import { setupBrowser } from "./browser.ts";
