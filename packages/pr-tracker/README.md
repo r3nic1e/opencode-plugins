@@ -7,7 +7,7 @@ Remembers the pull requests that the agent creates through the GitHub MCP in eac
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugins": ["@r3nic1e/opencode-pr-tracker@0.1.2"],
+  "plugins": ["@r3nic1e/opencode-pr-tracker@0.1.3"],
 }
 ```
 
@@ -33,7 +33,7 @@ The defaults match the [GitHub MCP server](https://github.com/github/github-mcp-
 {
   "plugins": [
     {
-      "package": "@r3nic1e/opencode-pr-tracker@0.1.2",
+      "package": "@r3nic1e/opencode-pr-tracker@0.1.3",
       "options": { "createTool": "gh_create_pull_request", "readTool": "gh_pull_request_read" },
     },
   ],

@@ -21,7 +21,7 @@ Add server plugins to `plugins` in `opencode.json(c)`. Pin a version, and use th
 {
   "$schema": "https://opencode.ai/config.json",
   "plugins": [
-    "@r3nic1e/opencode-evidence@0.1.2",
+    "@r3nic1e/opencode-evidence@0.1.3",
     {
       "package": "@r3nic1e/opencode-openai-decisions@0.1.1",
       "options": { "endpoint": "https://api.openai.com/v1/decisions", "providerID": "openai-api" },
@@ -35,15 +35,20 @@ A package with only a TUI part, such as `@r3nic1e/opencode-mcp-args`, goes in `p
 Each release also has a Git tag `<directory>@<version>`, so you can install from GitHub without npm:
 
 ```sh
-opencode plugin add 'github:r3nic1e/opencode-plugins#evidence@0.1.2::path:packages/evidence'
+opencode plugin add 'github:r3nic1e/opencode-plugins#evidence@0.1.3::path:packages/evidence'
 ```
 
 ## Development
 
-The packages ship TypeScript source; OpenCode loads it directly. There is no build step.
+Server and RPC parts ship as TypeScript source, and OpenCode loads them directly.
+
+A TUI part needs a build step. OpenCode compiles TUI JSX with the OpenTUI Solid transform, but that transform skips files under `node_modules`, where npm installs plugins. Without it, the JSX loses reactivity and the plugin renders nothing. So each package exports `./tui` as `dist/tui.js`, which `scripts/build-tui.mjs` compiles from `src/tui.tsx`. The file is committed so that Git installs work, and `prepack` rebuilds it on publish.
+
+After you edit a `src/tui.tsx`, run `npm run build` and commit `dist/tui.js`. `npm test` fails if it is stale.
 
 ```sh
 npm ci
+npm run build
 npm run typecheck
 npm test
 ```

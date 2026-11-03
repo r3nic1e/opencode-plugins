@@ -6,14 +6,18 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "node --test \"packages/*/test/*.test.mjs\"",
+    "build": "node scripts/build-tui.mjs",
+    "test": "node --test \"packages/*/test/*.test.mjs\" \"scripts/*.test.mjs\"",
     "typecheck": "tsc --noEmit -p ."
   },
   "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/preset-typescript": "^7.29.7",
     "@opencode/plugin": "^2.2.5",
     "@opentui/core": "^0.8.1",
     "@opentui/solid": "^0.8.1",
     "@types/node": "^22.20.5",
+    "babel-preset-solid": "^1.9.16",
     "solid-js": "^1.9.18",
     "typescript": "^7.0.2"
   }
