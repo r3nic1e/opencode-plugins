@@ -1,6 +1,6 @@
 {
   "name": "@r3nic1e/opencode-pr-tracker",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Tracks pull requests created through the GitHub MCP in each session and shows their status in the sidebar.",
   "type": "module",
   "license": "MIT",
