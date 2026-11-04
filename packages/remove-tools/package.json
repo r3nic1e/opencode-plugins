@@ -1,0 +1,40 @@
+{
+  "name": "@r3nic1e/opencode-remove-tools",
+  "version": "0.1.0",
+  "description": "Removes configured tools, including built-in ones such as session_move, from every session.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Sviatoslav Dumchenko",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/r3nic1e/opencode-plugins.git",
+    "directory": "packages/remove-tools"
+  },
+  "homepage": "https://github.com/r3nic1e/opencode-plugins/tree/main/packages/remove-tools#readme",
+  "bugs": {
+    "url": "https://github.com/r3nic1e/opencode-plugins/issues"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "@opencode/plugin": "^2.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@opencode/plugin": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}
