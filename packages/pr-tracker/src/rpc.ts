@@ -29,6 +29,7 @@ export const PrTracker = Rpc.define({
                 url: { type: "string" },
                 title: { type: "string" },
                 status: { type: "string", enum: ["draft", "open", "merged", "closed"] },
+                ci: { type: "string", enum: ["pending", "failure", "success", "none"] },
                 createdAt: { type: "number" },
               },
               required: ["sessionID", "owner", "repo", "number", "url", "title", "status", "createdAt"],
@@ -59,5 +60,6 @@ export type Item = {
   url: string
   title: string
   status: "draft" | "open" | "merged" | "closed"
+  ci?: "pending" | "failure" | "success" | "none"
   createdAt: number
 }

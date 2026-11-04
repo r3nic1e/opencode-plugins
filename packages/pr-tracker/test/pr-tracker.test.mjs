@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { decode, due, parseCreated, parseStatus, toolNames, upsert } from "../src/pr.ts";
+import { decode, due, parseCi, parseCreated, parseStatus, toolNames, upsert } from "../src/pr.ts";
 
 const URL = "https://github.com/octo-org/octo-repo/pull/436";
 
@@ -46,6 +46,52 @@ for (const [name, pr, status] of [
 
 test("returns no status for an error text", () => {
   assert.equal(parseStatus({ output: "Not Found" }), undefined);
+});
+
+const checkRuns = (...runs) => ({ output: JSON.stringify({ total_count: runs.length, check_runs: runs }) });
+const combined = (...statuses) => ({
+  output: JSON.stringify({ state: statuses.length ? "success" : "pending", total_count: statuses.length, statuses }),
+});
+const run = (id, name, status, conclusion = null) => ({ id, name, status, conclusion });
+
+test("CI: only the newest run of each check counts", () => {
+  const passedRerun = [run(2, "build", "completed", "success"), run(1, "build", "completed", "failure")];
+  const failedRerun = [run(1, "build", "completed", "success"), run(2, "build", "completed", "failure")];
+  assert.equal(parseCi(checkRuns(...passedRerun), combined()), "success");
+  assert.equal(parseCi(checkRuns(...failedRerun), combined()), "failure");
+});
+
+test("CI: a commit with check runs and no statuses is not pending", () => {
+  assert.equal(parseCi(checkRuns(run(1, "lint", "completed", "success")), combined()), "success");
+});
+
+test("CI: skipped and neutral checks count as passing", () => {
+  const runs = [run(1, "a", "completed", "skipped"), run(2, "b", "completed", "neutral"), run(3, "c", "completed", "success")];
+  assert.equal(parseCi(checkRuns(...runs), combined({ context: "jenkins", state: "success" })), "success");
+});
+
+test("CI: a failed commit status fails CI even when every check run passed", () => {
+  const runs = checkRuns(run(1, "lint", "completed", "success"));
+  assert.equal(parseCi(runs, combined({ context: "jenkins", state: "failure" })), "failure");
+  assert.equal(parseCi(runs, combined({ context: "jenkins", state: "error" })), "failure");
+});
+
+test("CI: work in progress is pending until something fails", () => {
+  assert.equal(parseCi(checkRuns(run(1, "build", "in_progress")), combined({ context: "jenkins", state: "success" })), "pending");
+  assert.equal(parseCi(checkRuns(run(1, "build", "completed", "success")), combined({ context: "jenkins", state: "pending" })), "pending");
+  assert.equal(
+    parseCi(checkRuns(run(1, "build", "queued"), run(2, "lint", "completed", "timed_out")), combined()),
+    "failure",
+  );
+});
+
+test("CI: a commit without checks or statuses has no CI", () => {
+  assert.equal(parseCi(checkRuns(), combined()), "none");
+});
+
+test("CI: unknown when either result is unreadable", () => {
+  assert.equal(parseCi({ output: "Not Found" }, combined()), undefined);
+  assert.equal(parseCi(checkRuns(run(1, "build", "completed", "success")), { output: "Not Found" }), undefined);
 });
 
 const pr = (fields) => ({

@@ -1,4 +1,6 @@
 export type Status = "draft" | "open" | "merged" | "closed"
+// "none": the head commit has no checks and no statuses.
+export type Ci = "pending" | "failure" | "success" | "none"
 
 export interface PullRequest {
   owner: string
@@ -7,6 +9,7 @@ export interface PullRequest {
   url: string
   title: string
   status: Status
+  ci?: Ci
   createdAt: number
   checkedAt: number
   // The call that created the PR; status refreshes reuse its session context.
@@ -95,6 +98,45 @@ export function parseStatus(result: unknown): Status | undefined {
     return "open"
   }
   return undefined
+}
+
+const FAILED_CONCLUSIONS = new Set(["failure", "timed_out", "cancelled", "action_required", "startup_failure"])
+
+function listIn(result: unknown, field: string): Record<string, unknown>[] | undefined {
+  for (const payload of payloads(result)) {
+    if (isRecord(payload) && Array.isArray(payload[field])) return payload[field].filter(isRecord)
+  }
+  return undefined
+}
+
+// CI reports through two GitHub APIs: check runs (GitHub Actions and apps) and commit statuses
+// (Jenkins, Atlantis). The commit status API already keeps only the latest status per context, but
+// check runs include every rerun, so only the newest run per name counts. A combined status is
+// "pending" when the commit has no statuses at all, so the individual statuses decide, not the
+// combined state. Returns undefined unless both results are readable.
+export function parseCi(checkRuns: unknown, combinedStatus: unknown): Ci | undefined {
+  const runs = listIn(checkRuns, "check_runs")
+  const statuses = listIn(combinedStatus, "statuses")
+  if (!runs || !statuses) return undefined
+
+  const latest = new Map<string, Record<string, unknown>>()
+  for (const run of runs) {
+    const name = String(run.name)
+    const seen = latest.get(name)
+    if (!seen || Number(run.id) > Number(seen.id)) latest.set(name, run)
+  }
+
+  const states: Ci[] = [
+    ...[...latest.values()].map((run): Ci =>
+      run.status !== "completed" ? "pending" : FAILED_CONCLUSIONS.has(String(run.conclusion)) ? "failure" : "success",
+    ),
+    ...statuses.map((status): Ci =>
+      status.state === "pending" ? "pending" : status.state === "failure" || status.state === "error" ? "failure" : "success",
+    ),
+  ]
+  if (states.includes("failure")) return "failure"
+  if (states.includes("pending")) return "pending"
+  return states.length > 0 ? "success" : "none"
 }
 
 export function sameRequest(a: Pick<Created, "owner" | "repo" | "number">, b: Pick<Created, "owner" | "repo" | "number">) {
