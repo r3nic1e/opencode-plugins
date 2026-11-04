@@ -4,6 +4,11 @@ import { PrTracker, type Item } from "./rpc.ts"
 
 // The sidebar shows only for the session on screen, so the poll runs only while that session is open.
 const POLL_MS = 60_000
+const PULSE = ["·", "•", "●", "•"]
+const PULSE_MS = 250
+
+const ciOf = (item: Item) =>
+  (item.status === "open" || item.status === "draft") && item.ci && item.ci !== "none" ? item.ci : undefined
 
 function SidebarPrs(props: { context: Plugin.Context; sessionID: string }) {
   const theme = props.context.theme
@@ -55,11 +60,25 @@ function SidebarPrs(props: { context: Plugin.Context; sessionID: string }) {
   )
   onCleanup(data.on("server.connected", () => load(true)))
 
+  const [frame, setFrame] = createSignal(0)
+  const pending = createMemo(() => items().some((item) => ciOf(item) === "pending"))
+  createEffect(() => {
+    if (!pending()) return
+    const pulse = setInterval(() => setFrame((n) => (n + 1) % PULSE.length), PULSE_MS)
+    onCleanup(() => clearInterval(pulse))
+  })
+
   const color = (status: Item["status"]) => {
     if (status === "open") return theme.text.feedback.success.base
     if (status === "merged") return theme.text.feedback.info.base
     if (status === "closed") return theme.text.feedback.error.base
     return theme.text.muted
+  }
+
+  const ciColor = (ci: NonNullable<Item["ci"]>) => {
+    if (ci === "failure") return theme.text.feedback.error.base
+    if (ci === "pending") return theme.text.feedback.warning.base
+    return theme.text.feedback.success.base
   }
 
   return (
@@ -79,6 +98,11 @@ function SidebarPrs(props: { context: Plugin.Context; sessionID: string }) {
                   <b>{item.repo}</b> #{item.number}
                 </a>
               </text>
+              <Show when={ciOf(item)}>
+                <text fg={ciColor(ciOf(item)!)} flexShrink={0}>
+                  {ciOf(item) === "pending" ? PULSE[frame()] : "●"}
+                </text>
+              </Show>
               <text fg={color(item.status)} wrapMode="none" flexShrink={0}>
                 {item.status}
               </text>
