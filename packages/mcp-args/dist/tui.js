@@ -11,26 +11,9 @@ import { createElement as _$createElement } from "@opentui/solid";
 import { Plugin } from "@opencode/plugin/tui";
 import { useTerminalDimensions } from "@opentui/solid";
 import { createMemo, For, Show } from "solid-js";
-
-// mcp-args: show MCP tool arguments above the permission prompt.
-//
-// The built-in prompt renders MCP calls as "Call tool <name>" and ignores the arguments that
-// core attaches as `metadata.input`. The `session.composer.top` slot renders directly above the
-// prompt, so this box sits on top of it.
-
-function isRecord(value) {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
+import { permissionDetails } from "../src/permission.ts";
 function format(value) {
   return typeof value === "string" ? value : JSON.stringify(value, null, 2) ?? String(value);
-}
-
-// MCP tools assert with resources ["*"] and the raw tool input in metadata.input.
-function mcpInput(request) {
-  if (!request) return undefined;
-  if (request.resources.length !== 1 || request.resources[0] !== "*") return undefined;
-  const input = request.metadata?.input;
-  return isRecord(input) ? input : undefined;
 }
 function Args(props) {
   const theme = props.context.theme;
@@ -55,7 +38,7 @@ function Args(props) {
     var _el$ = _$createElement("box"),
       _el$2 = _$createElement("box"),
       _el$3 = _$createElement("text"),
-      _el$4 = _$createTextNode(`Arguments for `),
+      _el$4 = _$createTextNode(`Details for `),
       _el$5 = _$createElement("text"),
       _el$7 = _$createElement("scrollbox");
     _$insertNode(_el$, _el$2);
@@ -139,7 +122,7 @@ function McpArgs(props) {
     const ids = [props.sessionID, ...data.session.family(props.sessionID).filter(id => id !== props.sessionID)];
     return ids.flatMap(id => data.session.permission.list(id) ?? [])[0];
   });
-  const input = createMemo(() => mcpInput(request()));
+  const input = createMemo(() => permissionDetails(request()));
   return _$createComponent(Show, {
     get when() {
       return input();

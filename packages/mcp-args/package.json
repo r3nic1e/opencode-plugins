@@ -1,7 +1,7 @@
 {
   "name": "@r3nic1e/opencode-mcp-args",
   "version": "0.1.3",
-  "description": "Shows MCP tool arguments above the permission prompt in the OpenCode TUI.",
+  "description": "Shows tool arguments and custom permission details above the permission prompt in the OpenCode TUI.",
   "type": "module",
   "license": "MIT",
   "author": "Sviatoslav Dumchenko",
