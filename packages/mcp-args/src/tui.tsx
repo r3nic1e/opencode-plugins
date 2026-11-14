@@ -2,29 +2,10 @@ import { Plugin } from "@opencode/plugin/tui"
 import type { ScrollBoxRenderable } from "@opentui/core"
 import { useTerminalDimensions } from "@opentui/solid"
 import { createMemo, For, Show } from "solid-js"
-
-// mcp-args: show MCP tool arguments above the permission prompt.
-//
-// The built-in prompt renders MCP calls as "Call tool <name>" and ignores the arguments that
-// core attaches as `metadata.input`. The `session.composer.top` slot renders directly above the
-// prompt, so this box sits on top of it.
-
-type Request = { action: string; resources: readonly unknown[]; metadata?: Record<string, unknown> }
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value)
-}
+import { permissionDetails, type Request } from "./permission.ts"
 
 function format(value: unknown): string {
   return typeof value === "string" ? value : (JSON.stringify(value, null, 2) ?? String(value))
-}
-
-// MCP tools assert with resources ["*"] and the raw tool input in metadata.input.
-function mcpInput(request: Request | undefined): Record<string, unknown> | undefined {
-  if (!request) return undefined
-  if (request.resources.length !== 1 || request.resources[0] !== "*") return undefined
-  const input = request.metadata?.input
-  return isRecord(input) ? input : undefined
 }
 
 function Args(props: { context: Plugin.Context; action: string; args: Record<string, unknown> }) {
@@ -47,7 +28,7 @@ function Args(props: { context: Plugin.Context; action: string; args: Record<str
   return (
     <box paddingLeft={2} paddingRight={2} flexDirection="column" flexShrink={0}>
       <box flexDirection="row" gap={1}>
-        <text fg={theme.text.feedback.warning.base}>Arguments for {props.action}</text>
+        <text fg={theme.text.feedback.warning.base}>Details for {props.action}</text>
         <text fg={theme.text.muted}>(PgUp/PgDn or mouse wheel to scroll)</text>
       </box>
       <scrollbox
@@ -87,7 +68,7 @@ function McpArgs(props: { context: Plugin.Context; sessionID: string }) {
     const ids = [props.sessionID, ...data.session.family(props.sessionID).filter((id) => id !== props.sessionID)]
     return ids.flatMap((id) => data.session.permission.list(id) ?? [])[0] as Request | undefined
   })
-  const input = createMemo(() => mcpInput(request()))
+  const input = createMemo(() => permissionDetails(request()))
 
   return (
     <Show when={input()} keyed>

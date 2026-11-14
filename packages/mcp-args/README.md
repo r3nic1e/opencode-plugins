@@ -1,6 +1,10 @@
 # MCP arguments
 
-The built-in permission prompt shows an MCP call only as "Call tool `<name>`". This TUI plugin shows the call's arguments in a box above the prompt, so you can check what you approve.
+This TUI plugin shows permission details in a box above the prompt, so you can check what you approve.
+
+- For MCP and custom tools with `metadata.input`, the box shows the input object.
+- For other permissions, the box shows the metadata fields. This includes the reason and additions from `request_access`.
+- Permissions can use wildcard or scoped resources. Empty details produce no box.
 
 - PgUp and PgDn scroll the arguments while a prompt waits. The mouse wheel also works.
 - The box shows the first pending request of the session on screen and its subagent sessions.
