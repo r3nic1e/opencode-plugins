@@ -113,3 +113,18 @@ test("invalid options fall back to the defaults", () => {
   assert.equal(guard.checkBash("git push"), checkToolCall("shell", { command: "git push" }));
   assert.equal(guard.checkBash("gh pr list"), checkToolCall("shell", { command: "gh pr list" }));
 });
+
+test("git.block false allows remote Git but still blocks gh and the API", () => {
+  const guard = createGuard({ git: { block: false } });
+  for (const command of ["git clone https://github.com/docker/docs.git", "git push origin feature/test", "git submodule update --init"]) {
+    assert.equal(guard.checkBash(command), null);
+  }
+  assert.match(guard.checkBash("git fetch && gh pr view 1"), /the `gh` CLI calls api\.github\.com/);
+  assert.match(guard.checkBash("curl https://api.github.com/repos/docker/docs"), /api\.github\.com is blocked/);
+});
+
+test("git.block accepts only false to disable the block", () => {
+  for (const block of [true, "false", 0, null]) {
+    assert.match(createGuard({ git: { block } }).checkBash("git push"), /remote `git push` is blocked/);
+  }
+});
