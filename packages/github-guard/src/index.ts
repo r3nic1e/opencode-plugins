@@ -55,13 +55,14 @@ type Advice = { note?: string; fix: string[] };
 
 export type GuardOptions = {
   // `fix` lines for git are keyed by operation (`push`, `submodule update`, ...), with `default` as the fallback.
-  git?: { note?: string; fix?: Record<string, string[]> };
+  // `block: false` lets remote git through, for sandboxes whose proxy carries Git smart HTTP.
+  git?: { block?: boolean; note?: string; fix?: Record<string, string[]> };
   gh?: Partial<Advice>;
   githubApi?: Partial<Advice>;
 };
 
 type Messages = {
-  git: { note?: string; fix: Record<string, string[]> };
+  git: { block: boolean; note?: string; fix: Record<string, string[]> };
   gh: Advice;
   githubApi: Advice;
 };
@@ -99,7 +100,11 @@ export function parseOptions(options: unknown): Messages {
       if (parsed) fix[op] = parsed;
     }
   }
-  return { git: { note: note(git.note), fix }, gh: advice(raw.gh), githubApi: advice(raw.githubApi) };
+  return {
+    git: { block: git.block !== false, note: note(git.note), fix },
+    gh: advice(raw.gh),
+    githubApi: advice(raw.githubApi),
+  };
 }
 
 function headline(text: string, extra: string | undefined): string {
@@ -141,6 +146,7 @@ export function createGuard(options?: unknown) {
 
     const plain = stripComments(stripQuotes(noHeredoc));
     if (GH_CALL.test(plain)) return ghReason(m, command);
+    if (!m.git.block) return null;
 
     const call = new RegExp(GIT_CALL.source, GIT_CALL.flags);
     let match: RegExpExecArray | null;

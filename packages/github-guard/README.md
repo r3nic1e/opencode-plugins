@@ -17,7 +17,7 @@ Text inside quotes, comments, and heredoc bodies does not count as a command.
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugins": ["@r3nic1e/opencode-github-guard@0.1.1"],
+  "plugins": ["@r3nic1e/opencode-github-guard@0.2.0"],
 }
 ```
 
@@ -27,6 +27,7 @@ The default messages tell the model to use a GitHub MCP server or to ask the use
 
 | Option | Meaning |
 |---|---|
+| `git.block` | `false` lets remote `git` commands through, for a sandbox whose proxy carries Git smart HTTP. `gh` and `api.github.com` stay blocked. Default `true`. |
 | `git.note` | Sentence added after "remote `git <op>` is blocked in this environment." |
 | `git.fix` | Map from operation (`fetch`, `pull`, `push`, `clone`, `ls-remote`, `remote update`, `submodule update`, `submodule add`) to the fix lines. `default` applies to operations without their own entry. |
 | `gh.note`, `gh.fix` | Note and fix lines for `gh`. |
@@ -38,7 +39,7 @@ A `fix` value is a string or an array of lines.
 {
   "plugins": [
     {
-      "package": "@r3nic1e/opencode-github-guard@0.1.1",
+      "package": "@r3nic1e/opencode-github-guard@0.2.0",
       "options": {
         "git": {
           "note": "Use the host Git broker MCP.",
