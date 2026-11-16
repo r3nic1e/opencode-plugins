@@ -9,7 +9,7 @@ const packages = tuiPackages()
 
 test("finds the packages with a TUI part", () => {
   const names = packages.map((dir) => path.basename(dir))
-  for (const name of ["evidence", "mcp-args", "pr-tracker"]) assert.ok(names.includes(name), `${name} not found`)
+  for (const name of ["evidence", "mcp-args"]) assert.ok(names.includes(name), `${name} not found`)
 })
 
 for (const dir of packages) {

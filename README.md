@@ -5,7 +5,6 @@ Plugins for [OpenCode 2](https://opencode.ai/v2/docs/build/plugins). Each direct
 | Package | What it does | Parts |
 |---|---|---|
 | [`@r3nic1e/opencode-evidence`](packages/evidence) | Records tool results, adds citation handles such as `[E17]`, and adds a TUI browser for them. | server, TUI, RPC |
-| [`@r3nic1e/opencode-pr-tracker`](packages/pr-tracker) | Tracks pull requests created through the GitHub MCP and shows their status in the session sidebar. | server, TUI, RPC |
 | [`@r3nic1e/opencode-mcp-args`](packages/mcp-args) | Shows MCP tool arguments above the permission prompt. | TUI only |
 | [`@r3nic1e/opencode-mcp-health`](packages/mcp-health) | Tells the model which MCP servers are down or need sign-in, and which local references are missing. | server |
 | [`@r3nic1e/opencode-github-guard`](packages/github-guard) | Blocks remote `git`, `gh`, and `api.github.com` calls in a sandbox that cannot make them, and tells the model what to use instead. | server |
